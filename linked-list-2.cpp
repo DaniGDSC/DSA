@@ -7,7 +7,9 @@ struct Node {
     struct Node* next;
 };
 
+// Function to insert a new node after a specific value in the linked list
 void insertAfterValue(struct Node** head_ref, int target_value, int new_data) {
+    // Allocate memory for the new node
     struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
     if (new_node == NULL) {
         throw std::runtime_error("Memory allocation failed");
@@ -15,21 +17,25 @@ void insertAfterValue(struct Node** head_ref, int target_value, int new_data) {
     new_node->data = new_data;
     new_node->next = NULL;
 
+    // If the list is empty, make the new node the head
     if (*head_ref == NULL) {
         *head_ref = new_node;
         return;
     }
 
+    // Traverse the list to find the target value
     struct Node* temp = *head_ref;
     while (temp != NULL && temp->data != target_value) {
         temp = temp->next;
     }
 
+    // If the target value is not found, free the allocated memory and throw an error
     if (temp == NULL) {
         free(new_node); // Free the allocated memory for the new node
         throw std::runtime_error("Target value not found in the list");
     }
 
+    // Insert the new node after the found node
     new_node->next = temp->next;
     temp->next = new_node;
 
@@ -75,7 +81,7 @@ int main() {
     printList(head);
 
     // Insert a new element after the node with value 2
-    insertAfterValue(&head, 1, 5);
+    insertAfterValue(&head, 3, 5);
 
     cout << "Updated List: ";
     printList(head);
