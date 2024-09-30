@@ -7,32 +7,32 @@ class Student:
 
 class StudentList:
     def __init__(self):
-        self.Head = Student()
-        self.Current = None
-        self.Tail = None
+        self.head = None
+        self.current = None
+        self.tail = None
         
     def add_student(self, student_id):
         new_student = Student(student_id)
-        if self.Current is None:
-            self.Head.next = new_student
-            self.Current = new_student
-            self.Tail = new_student
+        if self.current is None:
+            self.head = new_student
+            self.current = new_student
+            self.tail = new_student
         else: 
-            self.Current.next = new_student
-            self.Current = new_student
-            self.Tail = new_student
+            self.current.next = new_student
+            self.current = new_student
+            self.tail = new_student
             
     def insert_beginning(self, student_id):
         new_student = Student(student_id)
-        new_student.next = self.Head.next
-        self.Head.next = new_student
-        if self.Current is None:
-            self.Current = new_student
-        if self.Tail is None:
-            self.Tail = new_student
+        new_student.next = self.head
+        self.head = new_student
+        if self.current is None:
+            self.current = new_student
+        if self.tail is None:
+            self.tail = new_student
             
     def print_list(self):
-        temp = self.Head.next
+        temp = self.head
         while temp is not None:
             print(temp.id, end=' ')
             temp = temp.next    
