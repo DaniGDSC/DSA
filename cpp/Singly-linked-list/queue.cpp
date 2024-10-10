@@ -121,7 +121,7 @@ int main() {
     
     // Enqueue another element
     q.enqueue(4);
-     cout << "After enqueueing 4:" <<  endl;
+    cout << "After enqueueing 4:" <<  endl;
     q.print();
     
     // Clear the queue and print the result
