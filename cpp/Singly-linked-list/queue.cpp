@@ -2,30 +2,30 @@
 #include <stdexcept>
 using namespace std;
 
-// Queue class implementation using a singly linked list
 class Queue {
 private:
-    // Node structure for the linked list
     struct Node {
         int data;
         Node* next;
         Node(int value) : data(value), next(nullptr) {}
     };
     
-    Node* front_;  // Pointer to the front of the queue
-    Node* rear_;   // Pointer to the rear of the queue
-    int size_;     // Number of elements in the queue
+    Node* front_;
+    Node* rear_;
+    int size_;
 
 public:
-    // Constructor: Initialize an empty queue
     Queue() : front_(nullptr), rear_(nullptr), size_(0) {}
     
-    // Destructor: Clean up the queue
     ~Queue() {
-        clear();
+        Node* current = front_;
+        while (current != nullptr) {
+            Node* temp = current;
+            current = current->next;
+            delete temp;
+        }
     }
     
-    // Add an element to the rear of the queue
     void enqueue(int value) {
         Node* newNode = new Node(value);
         if (isEmpty()) {
@@ -37,10 +37,9 @@ public:
         size_++;
     }
     
-    // Remove and return the front element of the queue
     int dequeue() {
         if (isEmpty()) {
-            throw  runtime_error("Queue is empty");
+            throw runtime_error("Queue is empty");
         }
         int value = front_->data;
         Node* temp = front_;
@@ -53,80 +52,114 @@ public:
         return value;
     }
     
-    // Remove all elements from the queue
     void clear() {
-        while (!isEmpty()) {
-            dequeue();
+        Node* current = front_;
+        while (current != nullptr) {
+            Node* temp = current;
+            current = current->next;
+            delete temp;
         }
+        front_ = rear_ = nullptr;
+        size_ = 0;
     }
     
-    // Check if the queue is empty
     bool isEmpty() const {
         return size_ == 0;
     }
     
-    // Return the front element without removing it
     int front() const {
         if (isEmpty()) {
-            throw  runtime_error("Queue is empty");
+            throw runtime_error("Queue is empty");
         }
         return front_->data;
     }
+
+    int secondElement() const {
+        if (isEmpty()) {
+            throw runtime_error("Queue is empty");
+        }
+        if (front_->next == nullptr) {
+            throw runtime_error("Queue has only one element");
+        }
+        return front_->next->data;
+    }
     
-    // Return the number of elements in the queue
     int size() const {
         return size_;
     }
+
+    bool search(int value) const {
+        Node* current = front_;
+        while (current != nullptr) {
+            if (current->data == value) {
+                return true;
+            }
+            current = current->next;
+        }
+        return false;
+    }
     
-    // Print the contents of the queue
     void print() const {
         if (isEmpty()) {
-            cout << "Queue is empty" <<  endl;
+            cout << "Queue is empty" << endl;
             return;
         }
         
         Node* current = front_;
-         cout << "Queue: ";
+        cout << "Queue: ";
         while (current != nullptr) {
             cout << current->data;
             if (current->next != nullptr) {
-                 cout << " -> ";
+                cout << " -> ";
             }
             current = current->next;
         }
         cout << endl;
     }
+
+    int sumNegativeValues() const {
+        int sum = 0;
+        Node* current = front_;
+        while (current != nullptr) {
+            if (current->data < 0) {
+                sum += current->data;
+            }
+            current = current->next;
+        }
+        return sum;
+    }
 };
 
-// Example usage of the Queue class
 int main() {
     Queue q;
     
     // Enqueue some elements
     q.enqueue(1);
-    q.enqueue(2);
+    q.enqueue(-2);
     q.enqueue(3);
+    q.enqueue(-4);
     
-    // Print initial state
-    cout << "Initial state:" <<  endl;
+    cout << "Initial state:" << endl;
     q.print();
     
-    // Demonstrate front() and dequeue() operations
-    cout << "Front element: " << q.front() <<  endl;
-    cout << "Dequeued: " << q.dequeue() <<  endl;
+    cout << "Front element: " << q.front() << endl;
+    cout << "Second element: " << q.secondElement() << endl;
+    cout << "Dequeued: " << q.dequeue() << endl;
     
-    // Print state after dequeue
     cout << "After dequeue:" << endl;
     q.print();
     
-    // Enqueue another element
-    q.enqueue(4);
-    cout << "After enqueueing 4:" <<  endl;
+    q.enqueue(5);
+    cout << "After enqueueing 5:" << endl;
     q.print();
+
+    cout << "3 exists in the queue: " << (q.search(3) ? "yes" : "no") << endl;
+    cout << "6 exists in the queue: " << (q.search(6) ? "yes" : "no") << endl;
+
+    cout << "Sum of negative values: " << q.sumNegativeValues() << endl;
     
-    // Clear the queue and print the result
     q.clear();
-     cout << "After clear:" <<  endl;
+    cout << "After clear:" << endl;
     q.print();
     
     return 0;
