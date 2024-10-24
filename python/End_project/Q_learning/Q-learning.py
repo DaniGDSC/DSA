@@ -2,8 +2,10 @@ import numpy as np
 import random
 from collections import deque
 import tensorflow as tf
-from tensorflow.keras import layers
-import gym as layers
+from tensorflow import keras
+from keras import layers
+import gym
+
 # Define the environment (simple custom environment or OpenAI Gym environment)
 class Environment:
     def __init__(self):
@@ -11,10 +13,15 @@ class Environment:
         self.action_space_size = 3  # Example action space size
 
     def reset(self):
-        return random.randint(0, self.state_space_size - 1)
+        # Return a one-hot encoded initial state
+        initial_state = np.zeros(self.state_space_size)
+        initial_state[random.randint(0, self.state_space_size - 1)] = 1
+        return initial_state
 
     def step(self, action):
-        next_state = random.randint(0, self.state_space_size - 1)
+        # Return a one-hot encoded next state, reward, and done flag
+        next_state = np.zeros(self.state_space_size)
+        next_state[random.randint(0, self.state_space_size - 1)] = 1
         reward = random.random()  # Example reward
         done = random.choice([True, False])  # Whether the episode ends
         return next_state, reward, done
@@ -34,7 +41,7 @@ class DQNAgent:
 
     def build_model(self, learning_rate):
         # Optimized model with fewer parameters
-        model = tf.keras.Sequential([
+        model = keras.Sequential([
             layers.Dense(24, input_dim=self.state_space_size, activation='relu'),
             layers.Dense(24, activation='relu'),
             layers.Dense(self.action_space_size, activation='linear')  # Output layer for Q-values of each action
@@ -92,6 +99,12 @@ def train_dqn_agent(episodes=1000):
     agent = DQNAgent(state_space_size=env.state_space_size, action_space_size=env.action_space_size)
 
     for episode in range(episodes):
+        # Allow user to quit by entering 'q'
+        user_input = input("Press Enter to continue or 'q' to quit: ")
+        if user_input.lower() == 'q':
+            print("Training terminated by user.")
+            break
+
         state = env.reset()  # Reset environment at the start of each episode
         done = False
         total_reward = 0
