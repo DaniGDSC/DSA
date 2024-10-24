@@ -1,15 +1,6 @@
-#Copyright (C) 2020 Salvatore Carta, Anselmo Ferreira, Alessandro Sebastian Podda, Diego Reforgiato Recupero, Antonio Sanna. All rights reserved.
-
-#Imports the SPEnv library, which will perform the Agent actions themselves
 from spEnv import SpEnv
-
-#Callback used to print the results at each episode
 from callback import ValidationCallback
-
-#Keras library for the NN considered
 from keras.models import Sequential
-
-#Keras libraries for layers, activations and optimizers used
 from keras.layers import Dense, Activation, Flatten
 from keras.layers.advanced_activations import LeakyReLU, PReLU
 from keras.optimizers import Adam
@@ -33,20 +24,6 @@ import datetime
 MK="dax"
 
 class DeepQTrading:
-    
-    #Class constructor
-    #model: Keras model considered
-    #Explorations is a vector containing (i) probability of random predictions; (ii) how many epochs will be 
-    # runned by the algorithm (we run the algorithm several times-several iterations)  
-    #trainSize: size of the training set
-    #validationSize: size of the validation set
-    #testSize: size of the testing set 
-    #outputFile: name of the file to print results
-    #begin: Initial date
-    #end: final date
-    #nbActions: number of decisions (0-Hold 1-Long 2-Short) 
-    #nOutput is the number of walks. We are doing 5 walks.  
-    #operationCost: Price for the transaction (we set they are free)
     def __init__(self, model, explorations, trainSize, validationSize, testSize, outputFile, begin, end, nbActions, isOnlyShort, ensembleFolderName, operationCost=0):
         
         self.isOnlyShort=isOnlyShort
