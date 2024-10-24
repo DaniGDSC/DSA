@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 
 
-
 def full_ensemble(df):
     m1 = df.eq(1).all(axis=1)
 
